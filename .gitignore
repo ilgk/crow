@@ -29,7 +29,8 @@ unittest
 *.gcda
 *.gcno
 
-build
+/build/
 
 .directory
 crow_all.h
+/x64/
