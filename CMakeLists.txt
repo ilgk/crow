@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project (crow_all)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 find_package(Tcmalloc)
 find_package(Threads)
@@ -15,11 +16,12 @@ endif()
 
 
 if (MSVC)
-set(Boost_USE_STATIC_LIBS "On")
-find_package( Boost 1.52 COMPONENTS system thread regex REQUIRED )
+    add_definitions(-DCROW_MSVC_WORKAROUND)
+    set(Boost_USE_STATIC_LIBS "On")
+    find_package( Boost 1.52 COMPONENTS system thread regex REQUIRED )
 else()
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++1y -pedantic -Wextra")
-find_package( Boost 1.52 COMPONENTS system thread REQUIRED )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++1y -pedantic -Wextra")
+    find_package( Boost 1.52 COMPONENTS system thread REQUIRED )
 endif()
 
 include_directories( ${Boost_INCLUDE_DIR} )
@@ -51,3 +53,8 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/amalgamate/crow_all.h
     )
 
 add_custom_target(amalgamation ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/amalgamate/crow_all.h)
+
+add_library(libcrow INTERFACE)
+target_sources(libcrow INTERFACE ${ALL_HEADERS})
+add_custom_target(crow ALL)
+target_link_libraries(crow libcrow)
