@@ -33,8 +33,6 @@ include_directories("${PROJECT_SOURCE_DIR}")
  
 #add_subdirectory(src)
 add_subdirectory(examples)
-if (MSVC)
-else()
 add_subdirectory(tests)
 
 enable_testing()
@@ -43,12 +41,13 @@ add_test(NAME template_test COMMAND ${CMAKE_CURRENT_BINARY_DIR}/tests/template/t
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/amalgamate)
 
+file(GLOB_RECURSE ALL_HEADERS ${PROJECT_SOURCE_DIR}/include/*.h)
+
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/amalgamate/crow_all.h
     COMMAND python ${PROJECT_SOURCE_DIR}/amalgamate/merge_all.py ${PROJECT_SOURCE_DIR}/include
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/amalgamate/crow_all.h ${PROJECT_SOURCE_DIR}/amalgamate
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/amalgamate
-    DEPENDS ${PROJECT_SOURCE_DIR}/include/*.h
+    DEPENDS ${ALL_HEADERS}
     )
 
 add_custom_target(amalgamation ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/amalgamate/crow_all.h)
-endif()
