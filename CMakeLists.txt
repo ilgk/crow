@@ -24,13 +24,13 @@ endif()
 
 include_directories( ${Boost_INCLUDE_DIR} )
 
-set(PROJECT_INCLUDE_DIR 
+set(PROJECT_INCLUDE_DIR
 ${PROJECT_SOURCE_DIR}/include
 )
 
 include_directories("${PROJECT_INCLUDE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}")
- 
+
 #add_subdirectory(src)
 add_subdirectory(examples)
 add_subdirectory(tests)
